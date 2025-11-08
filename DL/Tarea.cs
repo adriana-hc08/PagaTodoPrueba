@@ -16,9 +16,9 @@ namespace DL
         public string Title { get; set; }
         [MaxLength(200)]
         public string Description { get; set; }
-        [MaxLength(50)]
-        public string Status { get; set; }
+        public int? IdStatus { get; set; }
         public DateTime CreationDate{ get; set; }
 
+        public virtual Status? IdStatusNavigation { get; set; }
     }
 }

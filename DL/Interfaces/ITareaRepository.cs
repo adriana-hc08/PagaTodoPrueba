@@ -32,7 +32,7 @@ namespace DL.Interfaces
                     IdTarea = t.IdTarea,
                     Title = t.Title,
                     Description = t.Description,
-                    Status = t.Status,
+                    //Status = t.Status,
                     CreationDate = t.CreationDate
                 }).ToList();
         }
@@ -47,7 +47,7 @@ namespace DL.Interfaces
                 IdTarea = t.IdTarea,
                 Title = t.Title,
                 Description = t.Description,
-                Status = t.Status,
+                //Status = t.Status,
                 CreationDate = t.CreationDate
             };
         }
@@ -58,7 +58,7 @@ namespace DL.Interfaces
             {
                 Title = tarea.Title,
                 Description = tarea.Description,
-                Status = tarea.Status,
+                //Status = tarea.Status,
                 CreationDate = tarea.CreationDate
             };
             _context.Tareas.Add(entity);
@@ -71,7 +71,7 @@ namespace DL.Interfaces
             {
                 entity.Title = tarea.Title;
                 entity.Description = tarea.Description;
-                entity.Status = tarea.Status;
+                //entity.Status = tarea.Status;
             }
         }
 
