@@ -1,4 +1,12 @@
+using DL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var conString = builder.Configuration.GetConnectionString("AHernandezPrueba");
+
+builder.Services.AddDbContext<AHernandezPruebaContex>(options => options.UseSqlServer(conString));
+
 builder.Services.AddScoped<BL.Tarea>();
 
 // Add services to the container.
