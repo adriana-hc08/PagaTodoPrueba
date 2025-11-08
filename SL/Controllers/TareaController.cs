@@ -5,14 +5,11 @@ namespace SL.Controllers
 {
     [Route("Api/Tasks/")]
     public class TareaController : Controller
-    {
-
-        public readonly AHernandezPruebaContex _context;
+    {     
         public readonly BL.Tarea _tarea;
 
-        public TareaController(AHernandezPruebaContex context,BL.Tarea tarea)
-        {
-            _context = context;
+        public TareaController(BL.Tarea tarea)
+        {         
             _tarea = tarea;
         }
         [Route("GetAll")]
