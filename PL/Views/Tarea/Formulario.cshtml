@@ -1,0 +1,88 @@
+﻿@model ML.Tarea
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Gestion de Tareas</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h5>Agregar nueva tarea</h5>
+        </div>
+    </div>
+    @using (Html.BeginForm("Formulario", "Tarea", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
+                    
+                        @Html.HiddenFor(model => model.IdTarea)
+                    
+                    <div class="col-6">
+                        @Html.LabelFor(model => model.Title, new { @class = "form-label" })
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="bi bi-truck-front" style="font-size: 1em;"></i>
+                            </div>
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        @Html.LabelFor(model => model.Description, new { @class = "form-label" })
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="bi bi-car-front" style="font-size: 1em;"></i>
+                            </div>
+                            @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">                 
+                    <div class="col-6">
+                        @Html.LabelFor(model => model.CreationDate, new { @class = "form-label" })
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="bi bi-card-text" style="font-size: 1em;"></i>
+                            </div>
+                            @Html.TextBoxFor(model => model.CreationDate, new { @class = "form-control", type = "datetime-local" })
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        @Html.LabelFor(model => model.Status, new { @class = "form-label" })
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="bi bi-list" style="font-size: 1em;"></i>
+                            </div>
+                            @Html.DropDownListFor(model => model.Status.IdStatus, new SelectList(Model.Status.Statuses, "IdStatus", "Nombre"),
+                            "Selecciona un status", new { @id = "ddlStatus", @class = "form-control" })
+                        </div>
+                    </div>
+                </div>              
+                <div class="row mt-3">
+                    <div class="col-2">
+                        <input type="submit" name="Action" value="Guardar" class="btn btn-success" />
+                    </div>
+                    <div class="col-2">
+                        @Html.ActionLink("Regresar", "GetAll", "Auto", new { @class = "btn btn-danger" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+
+</div>
+
+
+
+
+
+

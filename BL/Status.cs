@@ -9,7 +9,7 @@ namespace BL
 
         public Status(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;    
         }
 
         public Result GetAll()
