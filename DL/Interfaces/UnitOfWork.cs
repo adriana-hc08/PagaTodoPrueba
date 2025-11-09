@@ -10,6 +10,7 @@ namespace DL.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         ITareaRepository TareaRepository { get; }
+        IStatusRepository StatusRepository { get; }
         int Save();
     }
 
@@ -18,11 +19,13 @@ namespace DL.Interfaces
     {
         private readonly AHernandezPruebaContex _context;
         public ITareaRepository TareaRepository { get; }
+        public IStatusRepository StatusRepository { get; }
 
         public UnitOfWork(AHernandezPruebaContex context)
         {
-            _context = context;
+            _context = context; // Variable correcta
             TareaRepository = new TareaRepository(_context);
+            StatusRepository = new StatusRepository(_context);
         }
 
         public int Save() => _context.SaveChanges();

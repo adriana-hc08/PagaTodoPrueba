@@ -11,7 +11,7 @@ namespace ML
         public int IdTarea { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
-        public ML.Status status { get; set; }
+        public ML.Status Status { get; set; }
         public DateTime CreationDate { get; set; }
         public List<object>? Tareas { get; set; }
     }

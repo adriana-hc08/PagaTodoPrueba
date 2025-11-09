@@ -1,4 +1,5 @@
 using DL;
+using DL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,12 @@ var conString = builder.Configuration.GetConnectionString("AHernandezPrueba");
 
 builder.Services.AddDbContext<AHernandezPruebaContex>(options => options.UseSqlServer(conString));
 
+builder.Services.AddScoped<BL.Tarea>();
+builder.Services.AddScoped<BL.Status>();
+builder.Services.AddScoped<DL.Interfaces.ITareaRepository, DL.Interfaces.TareaRepository>();
+builder.Services.AddScoped<DL.Interfaces.IStatusRepository, DL.Interfaces.StatusRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

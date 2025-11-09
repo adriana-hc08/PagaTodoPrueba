@@ -19,9 +19,17 @@ namespace BL
             var result = new Result();
             try
             {
-                var tareas = _unitOfWork.TareaRepository.GetAll();
-                result.Objects = new List<object>(tareas);
-                result.Correct = true;
+                var tareasResult = _unitOfWork.TareaRepository.GetAll();
+                if (tareasResult.Correct)
+                {
+                    result.Objects = tareasResult.Objects; 
+                    result.Correct = true;
+                }
+                else
+                {
+                    result.Correct = false;
+                    result.ErrorMessage = tareasResult.ErrorMessage;
+                }
             }
             catch (Exception ex)
             {

@@ -1,0 +1,74 @@
+﻿@model ML.Tarea
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+<h2>Autos</h2>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ActionLink("Agregar Tarea", "Formulario", "Tarea", new { IdTarea = 0 }, new { @class = "btn btn-success" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            @if (Model.Tareas != null)
+            {
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th> Editar </th>
+                            <th> IdTarea </th>
+                            <th> Titulo </th>
+                            <th> Descripcion </th>
+                            <th> Status </th>
+                            <th> Fecha </th>
+                            <th> Eliminar </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ML.Tarea tarea in Model.Tareas)
+                        {
+                            <tr>
+                                <td>
+
+                                    <a href="@Url.Action("Formulario", "Tarea", new { IdTarea = tarea.IdTarea })"> 
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                </td>
+                                <td>@tarea.IdTarea</td>
+                                <td>@tarea.Title</td>
+                                <td>@tarea.Description</td>
+                                <td>@tarea.Status.Nombre</td>
+                                <td>@tarea.CreationDate</td>
+                                <td>
+                                    <a href="@Url.Action("Delete", "Tarea", new { IdTarea = tarea.IdTarea })">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    A simple danger alert—check it out!
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
+

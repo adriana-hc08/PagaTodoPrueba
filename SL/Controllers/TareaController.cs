@@ -5,18 +5,19 @@ namespace SL.Controllers
 {
     [Route("Api/Tasks/")]
     public class TareaController : Controller
-    {     
-        public readonly BL.Tarea _tarea;
-
-        public TareaController(BL.Tarea tarea)
-        {         
-            _tarea = tarea;
+    {
+        private readonly DL.Interfaces.ITareaRepository _tareaRepository;
+        private readonly DL.Interfaces.IStatusRepository _statusRepository;
+        public TareaController(DL.Interfaces.ITareaRepository tareaRepository, DL.Interfaces.IStatusRepository statusRepository)
+        {
+            _tareaRepository = tareaRepository;
+            _statusRepository = statusRepository;
         }
         [Route("GetAll")]
         [HttpGet]
         public IActionResult GetAll()
         {
-            ML.Result result = _tarea.GetAll();
+            ML.Result result = _tareaRepository.GetAll();
             if (result.Correct)
             {
                 return Ok(result);
@@ -32,7 +33,7 @@ namespace SL.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]ML.Tarea tarea)
         {
-            ML.Result result = _tarea.Add(tarea);
+            ML.Result result = _tareaRepository.Add(tarea);
             if (result.Correct)
             {
                 return Ok(result);
@@ -48,7 +49,7 @@ namespace SL.Controllers
         [HttpPut]
         public IActionResult GetAll([FromBody] ML.Tarea tarea)
         {
-            ML.Result result = _tarea.Update(tarea);
+            ML.Result result = _tareaRepository.Update(tarea);
             if (result.Correct)
             {
                 return Ok(result);
@@ -64,7 +65,7 @@ namespace SL.Controllers
         [HttpGet]
         public IActionResult GetByid(int IdTarea)
         {
-            ML.Result result = _tarea.GetById(IdTarea);
+            ML.Result result = _tareaRepository.GetById(IdTarea);
             if (result.Correct)
             {
                 return Ok(result);
@@ -79,7 +80,38 @@ namespace SL.Controllers
         [HttpDelete]
         public IActionResult Delete(int IdTarea)
         {
-            ML.Result result = _tarea.Delete(IdTarea);
+            ML.Result result = _tareaRepository.Delete(IdTarea);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+
+        }
+
+        [Route("AddStatus")]
+        [HttpPost]
+        public IActionResult AddStatus([FromBody] ML.Status status)
+        {
+            ML.Result result = _statusRepository.Add(status);
+            if (result.Correct)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+
+        }
+        [Route("GetAllStatus")]
+        [HttpGet]
+        public IActionResult GetAllStatus()
+        {
+            ML.Result result = _statusRepository.GetAll();
             if (result.Correct)
             {
                 return Ok(result);
