@@ -92,35 +92,6 @@ namespace SL.Controllers
 
         }
 
-        [Route("AddStatus")]
-        [HttpPost]
-        public IActionResult AddStatus([FromBody] ML.Status status)
-        {
-            ML.Result result = _statusRepository.Add(status);
-            if (result.Correct)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-
-        }
-        [Route("GetAllStatus")]
-        [HttpGet]
-        public IActionResult GetAllStatus()
-        {
-            ML.Result result = _statusRepository.GetAll();
-            if (result.Correct)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-
-        }
+        
     }
 }

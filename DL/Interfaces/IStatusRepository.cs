@@ -9,7 +9,7 @@ namespace DL.Interfaces
     public interface IStatusRepository
     {
         ML.Result GetAll();
-        ML.Result Add(ML.Status status);
+        
         
     }
     public class StatusRepository : IStatusRepository
@@ -46,30 +46,5 @@ namespace DL.Interfaces
             return result;
         }
 
-        public ML.Result Add(ML.Status status)
-        {
-            ML.Result result = new ML.Result();
-
-            try
-            {
-                var entity = new DL.Status
-                {
-                    Nombre = status.Nombre
-                };
-
-                _context.Statuses.Add(entity);
-                _context.SaveChanges();
-
-                result.Correct = true;
-                result.ErrorMessage = "Status agregado correctamente";
-            }
-            catch (Exception ex)
-            {
-                result.Correct = false;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
-        }
     }
 }
