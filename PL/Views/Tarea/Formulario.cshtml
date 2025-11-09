@@ -17,7 +17,7 @@
             <h5>Agregar nueva tarea</h5>
         </div>
     </div>
-    @using (Html.BeginForm("Formulario", "Tarea", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Formulario", "Tarea", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation", @novalidate = "novalidate" }))
     {
         <div class="row">
             <div class="col-12">
@@ -26,21 +26,21 @@
                         @Html.HiddenFor(model => model.IdTarea)
                     
                     <div class="col-6">
-                        @Html.LabelFor(model => model.Title, new { @class = "form-label" })
+                        @Html.LabelFor(model => model.Title, new { @class = "form-label"  })
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="bi bi-truck-front" style="font-size: 1em;"></i>
+                                <i class="bi bi-list-task"></i>
                             </div>
-                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @required = "required" })
                         </div>
                     </div>
                     <div class="col-6">
                         @Html.LabelFor(model => model.Description, new { @class = "form-label" })
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="bi bi-car-front" style="font-size: 1em;"></i>
+                                <i class="bi bi-list-task"></i>
                             </div>
-                            @Html.TextBoxFor(model => model.Description, new { @class = "form-control" })
+                            @Html.TextBoxFor(model => model.Description, new { @class = "form-control", @required = "required" })
                         </div>
                     </div>
                 </div>
@@ -49,9 +49,17 @@
                         @Html.LabelFor(model => model.CreationDate, new { @class = "form-label" })
                         <div class="input-group-prepend">
                             <div class="input-group-text">
-                                <i class="bi bi-card-text" style="font-size: 1em;"></i>
+                                <i class="bi bi-calendar-check"></i>
                             </div>
-                            @Html.TextBoxFor(model => model.CreationDate, new { @class = "form-control", type = "datetime-local" })
+                           @if (Model.CreationDate.HasValue)
+                           {
+                                @Html.TextBoxFor(model => model.CreationDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local", @required = "required" })
+                           }
+                           else
+                           {
+                                @Html.TextBoxFor(model => model.CreationDate, DateTime.Now.ToString("yyyy-MM-ddTHH:mm"), new { @class = "form-control", type = "datetime-local" })
+                           }
+
                         </div>
                     </div>
                     <div class="col-6">
@@ -61,7 +69,7 @@
                                 <i class="bi bi-list" style="font-size: 1em;"></i>
                             </div>
                             @Html.DropDownListFor(model => model.Status.IdStatus, new SelectList(Model.Status.Statuses, "IdStatus", "Nombre"),
-                            "Selecciona un status", new { @id = "ddlStatus", @class = "form-control" })
+                            "Selecciona un status", new { @id = "ddlStatus", @class = "form-control", @required = "required" })
                         </div>
                     </div>
                 </div>              
@@ -81,8 +89,8 @@
 
 </div>
 
-
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/Validaciones/ValidacionesTarea.js"></script>
 
 
 

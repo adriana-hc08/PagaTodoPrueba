@@ -4,6 +4,12 @@
 *@
 @{
 }
+@if (TempData["Mensaje"] != null)
+{
+    <script>
+        alert('@TempData["Mensaje"]');
+    </script>
+}
 
 <h2>Gestion de Tareas</h2>
 

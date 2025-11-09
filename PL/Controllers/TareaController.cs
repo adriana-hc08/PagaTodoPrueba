@@ -65,33 +65,44 @@ namespace PL.Controllers
         [HttpPost]
         public IActionResult Formulario(ML.Tarea tarea)
         {
-            ML.Result result = new ML.Result();
-
-            if (tarea.IdTarea == 0)
+            if (ModelState.IsValid)
             {
-                result = AddApi(tarea);
+                ML.Result result = new ML.Result();
+
+                if (tarea.IdTarea == 0)
+                {
+                    result = AddApi(tarea);
+                    TempData["Mensaje"] = "Tarea agregada correctamente.";
+                }
+                else
+                {
+                    result = UpdateApi(tarea);
+                    TempData["Mensaje"] = "Tarea actualizada correctamente.";
+                }
+                if (result.Correct)
+                {
+                    TempData.Keep("Mensaje");
+                    return RedirectToAction("GetAll");
+                }
             }
             else
             {
-                result = UpdateApi(tarea);
+                tarea.Status.Statuses = new List<object>();
+                return View(tarea);
             }
-            if (result.Correct)
-            {
-                return RedirectToAction("GetAll");
-            }
-
-            return View();
+                return View();
         }
         public ActionResult Delete(int IdTarea)
         {
             ML.Result result = DeleteApi(IdTarea);
             if (result.Correct)
             {
+                TempData["Mensaje"] = "Tarea eliminada correctamente.";
                 return RedirectToAction("GetAll");
             }
             else
             {
-                ViewBag.ErrorMesagge = "No se pudo eliminar";
+                TempData["Mensaje"] = "No se pudo eliminar";
                 return View("Error");
             }
 
