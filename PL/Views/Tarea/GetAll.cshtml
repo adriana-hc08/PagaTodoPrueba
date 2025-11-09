@@ -45,7 +45,16 @@
                                 <td>@tarea.Title</td>
                                 <td>@tarea.Description</td>
                                 <td>@tarea.Status.Nombre</td>
-                                <td>@tarea.CreationDate</td>
+                                <td>
+                                    @if (tarea.CreationDate.HasValue)
+                                    {
+                                        @tarea.CreationDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                    }
+                                    else
+                                    {
+                                        <text>Sin fecha</text>
+                                    }
+                                </td>
                                 <td>
                                     <a href="@Url.Action("Delete", "Tarea", new { IdTarea = tarea.IdTarea })">
                                         <i class="bi bi-trash-fill"></i>
@@ -60,7 +69,7 @@
             else
             {
                 <div class="alert alert-danger" role="alert">
-                    A simple danger alert—check it out!
+                    No hay registros
                 </div>
             }
 

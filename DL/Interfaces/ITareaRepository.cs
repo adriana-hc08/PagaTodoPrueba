@@ -1,4 +1,5 @@
-﻿using ML;
+﻿using DL.Migrations;
+using ML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,7 @@ namespace DL.Interfaces
                                 IdTarea = tarea.IdTarea,
                                 Title = tarea.Title,
                                 Description = tarea.Description,
+                                CreationDate=tarea.CreationDate,
                                 Status = new ML.Status
                                 {
                                     IdStatus = status.IdStatus,
@@ -105,10 +107,10 @@ namespace DL.Interfaces
                     Title = tarea.Title,
                     Description = tarea.Description,
                     IdStatus = tarea.Status.IdStatus,
-                    CreationDate = tarea.CreationDate
+                    CreationDate = tarea.CreationDate.HasValue ? tarea.CreationDate.Value : DateTime.Now
                 };
                 _context.Tareas.Add(entity);
-                _context.SaveChanges(); // Importante guardar cambios
+                _context.SaveChanges(); // guardar cambios
 
                 result.Correct = true;
                 result.ErrorMessage = "Tarea agregada correctamente";
@@ -134,6 +136,10 @@ namespace DL.Interfaces
                     entity.Title = tarea.Title;
                     entity.Description = tarea.Description;
                     entity.IdStatus = tarea.Status.IdStatus;
+                    if (tarea.CreationDate.HasValue)
+                    {
+                        entity.CreationDate = tarea.CreationDate.Value;
+                    }
                     _context.SaveChanges(); // Guardar cambios
 
                     result.Correct = true;
