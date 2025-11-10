@@ -1,0 +1,86 @@
+﻿@model ML.Tarea
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@if (TempData["Mensaje"] != null)
+{
+    <script>
+        alert('@TempData["Mensaje"]');
+    </script>
+}
+
+<h2>Gestion de Tareas</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            @Html.ActionLink("Agregar Tarea", "Formulario", "Tarea", new { IdTarea = 0 }, new { @class = "btn btn-success" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            @if (Model.Tareas != null)
+            {
+                <table class="table table-hover table-responsive-lg">
+                    <thead>
+                        <tr>
+                            <th> Editar </th>
+                            <th> IdTarea </th>
+                            <th> Titulo </th>
+                            <th> Descripcion </th>
+                            <th> Status </th>
+                            <th> Fecha </th>
+                            <th> Eliminar </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ML.Tarea tarea in Model.Tareas)
+                        {
+                            <tr>
+                                <td>
+
+                                    <a href="@Url.Action("Formulario", "Tarea", new { IdTarea = tarea.IdTarea })"> 
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                </td>
+                                <td>@tarea.IdTarea</td>
+                                <td>@tarea.Title</td>
+                                <td>@tarea.Description</td>
+                                <td>@tarea.Status.Nombre</td>
+                                <td>
+                                    @if (tarea.CreationDate.HasValue)
+                                    {
+                                        @tarea.CreationDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                    }
+                                    else
+                                    {
+                                        <text>Sin fecha</text>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Delete", "Tarea", new { IdTarea = tarea.IdTarea })">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    No hay registros
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>
+

@@ -1,61 +1,35 @@
-﻿using DL;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using DL.Interfaces;
 using ML;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BL
 {
     public class Tarea
     {
-        public readonly AHernandezPruebaContex _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public Tarea(AHernandezPruebaContex context)
+        public Tarea(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
-        public ML.Result GetAll()
-        {
-            Result result = new ML.Result();
 
+        public Result GetAll()
+        {
+            var result = new Result();
             try
             {
-
-                var listTareas = _context.Tareas
-                        .Select(tarea => new ML.Tarea
-                        {
-                            IdTarea = tarea.IdTarea,
-                            Title = tarea.Title,
-                            Description = tarea.Description,
-                            Status = tarea.Status,
-                            CreationDate = tarea.CreationDate
-                        }).ToList();
-                if (listTareas != null && listTareas.Count > 0)
+                var tareasResult = _unitOfWork.TareaRepository.GetAll();
+                if (tareasResult.Correct)
                 {
-                    result.Objects = new List<object>();
-
-                    foreach (var obj in listTareas)
-                    {
-                        ML.Tarea tarea = new ML.Tarea();
-                        tarea.IdTarea = obj.IdTarea;
-                        tarea.Title = obj.Title;
-                        tarea.Description = obj.Description;
-                        tarea.Status = obj.Status;
-                        tarea.CreationDate = obj.CreationDate;
-                        result.Objects.Add(tarea);
-                    }
+                    result.Objects = tareasResult.Objects; 
                     result.Correct = true;
                 }
                 else
                 {
                     result.Correct = false;
-                    result.ErrorMessage = "No se encontraron registros";
+                    result.ErrorMessage = tareasResult.ErrorMessage;
                 }
-
             }
             catch (Exception ex)
             {
@@ -64,55 +38,17 @@ namespace BL
             }
             return result;
         }
-        public ML.Result Add(ML.Tarea tarea)
+
+        public Result GetById(int idTarea)
         {
-            ML.Result result = new ML.Result();
+            var result = new Result();
             try
             {
-                var tareaEF = new DL.Tarea
+                var tarea = _unitOfWork.TareaRepository.GetById(idTarea);
+                if (tarea != null)
                 {
-                    Title = tarea.Title,
-                    Description = tarea.Description,
-                    Status = tarea.Status,
-                    CreationDate = tarea.CreationDate,
-                };
-
-                _context.Tareas.Add(tareaEF);
-                int filasAfectadas = _context.SaveChanges();
-
-                if (filasAfectadas > 0)
-                {
+                    result.Object = tarea;
                     result.Correct = true;
-                }
-                else
-                {
-                    result.Correct = false;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                result.Correct = false;
-                result.ErrorMessage = ex.Message;
-            }
-            return result;
-        }
-        public ML.Result Update(ML.Tarea tarea)
-        {
-            ML.Result result = new ML.Result();
-            try
-            {
-                var tareaExistente = _context.Tareas.FirstOrDefault(t => t.IdTarea == tarea.IdTarea);
-
-                if (tareaExistente != null)
-                {
-                    tareaExistente.Title = tarea.Title;
-                    tareaExistente.Description = tarea.Description;
-                    tareaExistente.Status = tarea.Status;
-
-                    int filasAfectadas = _context.SaveChanges();
-                    result.Correct = filasAfectadas > 0;
-
                 }
                 else
                 {
@@ -127,25 +63,15 @@ namespace BL
             }
             return result;
         }
-        public ML.Result Delete(int IdTarea)
+
+        public Result Add(ML.Tarea tarea)
         {
-            ML.Result result = new ML.Result();
+            var result = new Result();
             try
             {
-                var tarea = _context.Tareas.Find(IdTarea);
-
-                _context.Tareas.Remove(tarea);
-                int filasAfectadas = _context.SaveChanges();
-
-                if (filasAfectadas > 0)
-                {
-                    result.Correct = true;
-                }
-                else
-                {
-                    result.Correct = false;
-                }
-
+                _unitOfWork.TareaRepository.Add(tarea);
+                _unitOfWork.Save();
+                result.Correct = true;
             }
             catch (Exception ex)
             {
@@ -154,42 +80,32 @@ namespace BL
             }
             return result;
         }
-        public ML.Result GetById(int IdTarea)
+
+        public Result Update(ML.Tarea tarea)
         {
-            ML.Result result = new ML.Result();
+            var result = new Result();
             try
             {
-                var tarea = _context.Tareas
-             .Where(t => t.IdTarea == IdTarea)
-             .Select(t => new ML.Tarea
-             {
-                 IdTarea = t.IdTarea,
-                 Title = t.Title,
-                 Description = t.Description,
-                 Status = t.Status,
-                 CreationDate = t.CreationDate
-             }).FirstOrDefault();
+                _unitOfWork.TareaRepository.Update(tarea);
+                _unitOfWork.Save();
+                result.Correct = true;
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+            }
+            return result;
+        }
 
-                if (tarea != null)
-                {
-
-                    ML.Tarea tareaGuardar = new ML.Tarea();
-                    tareaGuardar.IdTarea = tarea.IdTarea;
-                    tareaGuardar.Title = tarea.Title;
-                    tareaGuardar.Description = tarea.Description;
-                    tareaGuardar.Status = tarea.Status;
-                    tareaGuardar.CreationDate = tarea.CreationDate;
-                    result.Object = tareaGuardar;
-
-                    result.Correct = true;
-                }
-                else
-                {
-                    result.Correct = false;
-                    result.ErrorMessage = "No se encontraron registros";
-                }
-
-
+        public Result Delete(int idTarea)
+        {
+            var result = new Result();
+            try
+            {
+                _unitOfWork.TareaRepository.Delete(idTarea);
+                _unitOfWork.Save();
+                result.Correct = true;
             }
             catch (Exception ex)
             {

@@ -1,14 +1,33 @@
 using DL;
+using DL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var MyAllowSpecificOrigins = "_myAllowSpecific";
 
 var conString = builder.Configuration.GetConnectionString("AHernandezPrueba");
 
 builder.Services.AddDbContext<AHernandezPruebaContex>(options => options.UseSqlServer(conString));
 
-builder.Services.AddScoped<BL.Tarea>();
 
+builder.Services.AddScoped<DL.Interfaces.ITareaRepository, DL.Interfaces.TareaRepository>();
+builder.Services.AddScoped<DL.Interfaces.IStatusRepository,DL.Interfaces.StatusRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<BL.Tarea>();
+builder.Services.AddScoped<BL.Status>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5153")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -25,6 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();

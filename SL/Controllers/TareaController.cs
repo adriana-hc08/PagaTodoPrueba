@@ -6,20 +6,18 @@ namespace SL.Controllers
     [Route("Api/Tasks/")]
     public class TareaController : Controller
     {
-
-        public readonly AHernandezPruebaContex _context;
-        public readonly BL.Tarea _tarea;
-
-        public TareaController(AHernandezPruebaContex context,BL.Tarea tarea)
+        private readonly DL.Interfaces.ITareaRepository _tareaRepository;
+        private readonly DL.Interfaces.IStatusRepository _statusRepository;
+        public TareaController(DL.Interfaces.ITareaRepository tareaRepository, DL.Interfaces.IStatusRepository statusRepository)
         {
-            _context = context;
-            _tarea = tarea;
+            _tareaRepository = tareaRepository;
+            _statusRepository = statusRepository;
         }
         [Route("GetAll")]
         [HttpGet]
         public IActionResult GetAll()
         {
-            ML.Result result = _tarea.GetAll();
+            ML.Result result = _tareaRepository.GetAll();
             if (result.Correct)
             {
                 return Ok(result);
@@ -35,7 +33,7 @@ namespace SL.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]ML.Tarea tarea)
         {
-            ML.Result result = _tarea.Add(tarea);
+            ML.Result result = _tareaRepository.Add(tarea);
             if (result.Correct)
             {
                 return Ok(result);
@@ -51,7 +49,7 @@ namespace SL.Controllers
         [HttpPut]
         public IActionResult GetAll([FromBody] ML.Tarea tarea)
         {
-            ML.Result result = _tarea.Update(tarea);
+            ML.Result result = _tareaRepository.Update(tarea);
             if (result.Correct)
             {
                 return Ok(result);
@@ -67,7 +65,7 @@ namespace SL.Controllers
         [HttpGet]
         public IActionResult GetByid(int IdTarea)
         {
-            ML.Result result = _tarea.GetById(IdTarea);
+            ML.Result result = _tareaRepository.GetById(IdTarea);
             if (result.Correct)
             {
                 return Ok(result);
@@ -82,7 +80,7 @@ namespace SL.Controllers
         [HttpDelete]
         public IActionResult Delete(int IdTarea)
         {
-            ML.Result result = _tarea.Delete(IdTarea);
+            ML.Result result = _tareaRepository.Delete(IdTarea);
             if (result.Correct)
             {
                 return Ok(result);
@@ -93,5 +91,7 @@ namespace SL.Controllers
             }
 
         }
+
+        
     }
 }
