@@ -9,7 +9,7 @@ namespace BL
 
         public Status(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;    
         }
 
         public Result GetAll()
@@ -36,21 +36,6 @@ namespace BL
             }
             return result;
         }
-        public Result Add(ML.Status status)
-        {
-            var result = new Result();
-            try
-            {
-                _unitOfWork.StatusRepository.Add(status);
-                _unitOfWork.Save();
-                result.Correct = true;
-            }
-            catch (Exception ex)
-            {
-                result.Correct = false;
-                result.ErrorMessage = ex.Message;
-            }
-            return result;
-        }
+       
     }
 }
